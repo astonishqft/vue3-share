@@ -55,7 +55,7 @@ app.mount('#app')  // ② 挂载 APP 实例
 
 <slide :class="size-50 aligncenter">
 通过创建 APP 实例和挂载 APP 实例即可，这时可以看到页面中分别显示对应数值：
-![](/app显示.jpeg)
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bccaca7ec584466c90ca06f3e960048a~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp)
 
 <slide :class="size-50 aligncenter">
 
