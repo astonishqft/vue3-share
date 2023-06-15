@@ -73,8 +73,16 @@ console.log(`total: ${total}`); // total: 20
 
 **那么如何修改上面代码，让 total 能够自动更新呢？**
 
-<slide :class="size-50 aligncenter">
+<slide :class="size-80">
 
+:::column {.vertical-align}
+
+
+- ① 初始化一个 Set 类型的 dep 变量，用来存放需要执行的副作用（ effect 函数），这边是修改 total 值的方法；
+- ② 创建 track() 函数，用来将需要执行的副作用保存到 dep 变量中（也称收集副作用）；
+- ③ 创建 trigger() 函数，用来执行 dep 变量中的所有副作用；
+在每次修改 price 或 quantity 后，调用 trigger() 函数执行所有副作用后， total 值将自动更新为最新值。
+----
 我们其实可以将修改 total 值的方法保存起来，等到与 total 值相关的变量（如 price 或 quantity 变量的值）发生变化时，触发该方法，更新 total 即可。我们可以这么实现：
 
 ```javascript
@@ -92,13 +100,7 @@ price = 20;
 trigger();
 console.log(`total: ${total}`); // total: 40
 ```
-
----
-
-- ① 初始化一个 Set 类型的 dep 变量，用来存放需要执行的副作用（ effect 函数），这边是修改 total 值的方法；
-- ② 创建 track() 函数，用来将需要执行的副作用保存到 dep 变量中（也称收集副作用）；
-- ③ 创建 trigger() 函数，用来执行 dep 变量中的所有副作用；
-在每次修改 price 或 quantity 后，调用 trigger() 函数执行所有副作用后， total 值将自动更新为最新值。
+:::
 
 <slide :class="size-50 aligncenter">
 
@@ -112,7 +114,16 @@ let product = { price: 10, quantity: 2 };
 
 从前面介绍我们知道，我们将所有副作用保存在一个 Set 集合中，而该集合不会有重复项，这里我们引入一个 Map 类型集合（即 depsMap ），其 key 为对象的属性（如： price 属性）， value 为前面保存副作用的 Set 集合（如： dep 对象）。
 
-<slide :class="size-50 aligncenter">
+<slide :class="size-80">
+
+:::column {.vertical-align}
+
+- ① 初始化一个 Map 类型的 depsMap 变量，用来保存每个需要响应式变化的对象属性（key 为对象的属性， value 为前面 Set 集合）；
+- ② 创建 track() 函数，用来将需要执行的副作用保存到 depsMap 变量中对应的对象属性下（也称收集副作用）；
+- ③ 创建 trigger() 函数，用来执行 dep 变量中指定对象属性的所有副作用；
+这样就实现监听对象的响应式变化，在 product 对象中的属性值发生变化， total 值也会跟着更新。
+
+----
 
 ```javascript
 let product = { price: 10, quantity: 2 }, total = 0;
@@ -142,11 +153,8 @@ trigger('price');
 console.log(`total: ${total}`); // total: 40
 ```
 
----
-- ① 初始化一个 Map 类型的 depsMap 变量，用来保存每个需要响应式变化的对象属性（key 为对象的属性， value 为前面 Set 集合）；
-- ② 创建 track() 函数，用来将需要执行的副作用保存到 depsMap 变量中对应的对象属性下（也称收集副作用）；
-- ③ 创建 trigger() 函数，用来执行 dep 变量中指定对象属性的所有副作用；
-这样就实现监听对象的响应式变化，在 product 对象中的属性值发生变化， total 值也会跟着更新。
+:::
+
 
 <slide :class="size-50 aligncenter">
 
@@ -156,7 +164,16 @@ console.log(`total: ${total}`); // total: 40
 
 这里我们引入一个 WeakMap 类型的对象，将需要观察的对象作为 key ，值为前面用来保存对象属性的 Map 变量。
 
-<slide :class="size-50 aligncenter">
+<slide :class="size-80">
+
+:::column
+
+- ① 初始化一个 WeakMap 类型的 targetMap 变量，用来要观察每个响应式对象；
+- ② 创建 track() 函数，用来将需要执行的副作用保存到指定对象（ target ）的依赖中（也称收集副作用）；
+- ③ 创建 trigger() 函数，用来执行指定对象（ target ）中指定属性（ key ）的所有副作用；
+这样就实现监听对象的响应式变化，在 product 对象中的属性值发生变化， total 值也会跟着更新。
+
+----
 
 ```javascript
 let product = { price: 10, quantity: 2 }, total = 0;
@@ -191,13 +208,8 @@ product.price = 20;
 trigger(product, 'price');
 console.log(`total: ${total}`); // total: 40
 ```
+:::
 
----
-
-- ① 初始化一个 WeakMap 类型的 targetMap 变量，用来要观察每个响应式对象；
-- ② 创建 track() 函数，用来将需要执行的副作用保存到指定对象（ target ）的依赖中（也称收集副作用）；
-- ③ 创建 trigger() 函数，用来执行指定对象（ target ）中指定属性（ key ）的所有副作用；
-这样就实现监听对象的响应式变化，在 product 对象中的属性值发生变化， total 值也会跟着更新。
 
 <slide :class="size-50 aligncenter">
 
@@ -242,8 +254,6 @@ Object.defineProperty() 函数这边就不多做介绍，可以阅读文档，�
 
 ## 如何使用 Proxy?
 
---- 
-
 Proxy 对象用于创建一个对象的代理，从而实现基本操作的拦截和自定义（如属性查找、赋值、枚举、函数调用等）。语法如下：
 
 ```javascript
@@ -251,8 +261,6 @@ const p = new Proxy(target, handler)
 ```
 
 参数如下：
-
----
 
 - **target** 要使用 Proxy 包装的目标对象（可以是任何类型的对象，包括原生数组，函数，甚至另一个代理）。
 - **handler** 一个通常以函数作为属性的对象，各属性中的函数分别定义了在执行各种操作时代理 p 的行为。
