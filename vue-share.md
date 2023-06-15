@@ -142,8 +142,6 @@ trigger('price');
 console.log(`total: ${total}`); // total: 40
 ```
 
-上面代码通过 3 个步骤，实现对 total 数据进行响应式变化：
-
 ---
 - ① 初始化一个 Map 类型的 depsMap 变量，用来保存每个需要响应式变化的对象属性（key 为对象的属性， value 为前面 Set 集合）；
 - ② 创建 track() 函数，用来将需要执行的副作用保存到 depsMap 变量中对应的对象属性下（也称收集副作用）；
