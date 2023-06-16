@@ -402,8 +402,6 @@ const track = (target, key) => {     // ②
 
 <slide :class="size-50 aligncenter">
 
-1. 引入 activeEffect 变量
-
 接下来引入 activeEffect 变量，来保存当前运行的 effect 函数。
 
 ```javascript {.animated.fadeInUp}
