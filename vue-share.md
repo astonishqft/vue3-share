@@ -77,7 +77,6 @@ console.log(`total: ${total}`); // total: 20
 
 :::column {.vertical-align}
 
-
 - ① 初始化一个 Set 类型的 dep 变量，用来存放需要执行的副作用（ effect 函数），这边是修改 total 值的方法；
 - ② 创建 track() 函数，用来将需要执行的副作用保存到 dep 变量中（也称收集副作用）；
 - ③ 创建 trigger() 函数，用来执行 dep 变量中的所有副作用；
@@ -154,7 +153,6 @@ console.log(`total: ${total}`); // total: 40
 ```
 
 :::
-
 
 <slide :class="size-50 aligncenter">
 
@@ -291,7 +289,7 @@ console.log(proxiedProduct.price);
 
 <slide :class="size-50 aligncenter">
 
-为了方便对比 Vue 3 源码，我们将上面代码抽象一层，使它看起来更像 Vue3 源码：
+为了方便对比Vue 3源码，我们将上面代码抽象一层，使它看起来更像Vue3源码：
 
 ```javascript
 function reactive(target){
@@ -317,11 +315,11 @@ console.log(product.price);
 // 20
 ```
 
-<slide :class="size-50 aligncenter">
+<slide :class="size-80 aligncenter">
 
-## 修改 track 和 trigger 函数
+## 修改track和trigger函数
 
-通过上面代码，我们已经实现一个简单 reactive() 函数，用来将普通对象转换为响应式对象。但是还缺少自动执行 track() 函数和 trigger() 函数，接下来修改上面代码：
+通过上面代码，我们已经实现一个简单reactive()函数，用来将普通对象转换为响应式对象。但是还缺少自动执行track()函数和trigger()函数，接下来修改上面代码：
 
 ```javascript
 const targetMap = new WeakMap();
@@ -517,9 +515,6 @@ console.log(total, salePrice);  // 100 18
 ```
 
 <slide :class="size-50 aligncenter">
-
-
-
 
 ## 引入 ref 方法
 
