@@ -34,7 +34,7 @@ Vue 最标志性的功能就是其低侵入性的响应式系统。组件状态�
 </div>
 ```
 
-```javascript
+```javascript {.animated.fadeInUp}
 const app = Vue.createApp({ // ① 创建 APP 实例
     data() {
         return {
@@ -61,7 +61,7 @@ app.mount('#app')  // ② 挂载 APP 实例
 
 ## 普通js中如何实现？
 
-```javascript
+```javascript {.animated.fadeInUp}
 let price = 10, quantity = 2;
 const total = price * quantity;
 console.log(`total: ${total}`); // total: 20
@@ -84,7 +84,7 @@ console.log(`total: ${total}`); // total: 20
 ----
 我们其实可以将修改 total 值的方法保存起来，等到与 total 值相关的变量（如 price 或 quantity 变量的值）发生变化时，触发该方法，更新 total 即可。我们可以这么实现：
 
-```javascript
+```javascript {.animated.fadeInUp}
 let price = 10, quantity = 2, total = 0;
 const dep = new Set(); // ① 
 const effect = () => { total = price * quantity };
@@ -107,7 +107,7 @@ console.log(`total: ${total}`); // total: 40
 
 通常，我们的对象具有多个属性，并且每个属性都需要自己的 dep。我们如何存储这些？比如：
 
-```javascript
+```javascript {.animated.fadeInUp}
 let product = { price: 10, quantity: 2 };
 ```
 
@@ -124,7 +124,7 @@ let product = { price: 10, quantity: 2 };
 
 ----
 
-```javascript
+```javascript {.animated.fadeInUp}
 let product = { price: 10, quantity: 2 }, total = 0;
 const depsMap = new Map(); // ① 
 const effect = () => { total = product.price * product.quantity };
@@ -173,7 +173,7 @@ console.log(`total: ${total}`); // total: 40
 
 ----
 
-```javascript
+```javascript {.animated.fadeInUp}
 let product = { price: 10, quantity: 2 }, total = 0;
 const targetMap = new WeakMap();     // ① 初始化 targetMap，保存观察对象
 const effect = () => { total = product.price * product.quantity };
@@ -254,7 +254,7 @@ Object.defineProperty() 函数这边就不多做介绍，可以阅读文档，�
 
 Proxy 对象用于创建一个对象的代理，从而实现基本操作的拦截和自定义（如属性查找、赋值、枚举、函数调用等）。语法如下：
 
-```javascript
+```javascript {.animated.fadeInUp}
 const p = new Proxy(target, handler)
 ```
 
@@ -267,7 +267,7 @@ const p = new Proxy(target, handler)
 
 使用 Proxy 方法来改造我们的代码：
 
-```javascript
+```javascript {.animated.fadeInUp}
 let product = { price: 10, quantity: 2 };
 let proxiedProduct = new Proxy(product, {
   get(target, key, receiver){
@@ -291,7 +291,7 @@ console.log(proxiedProduct.price);
 
 为了方便对比Vue 3源码，我们将上面代码抽象一层，使它看起来更像Vue3源码：
 
-```javascript
+```javascript {.animated.fadeInUp}
 function reactive(target){
   const handler = {  // ① 封装统一处理函数对象
     get(target, key, receiver){
@@ -321,7 +321,7 @@ console.log(product.price);
 
 通过上面代码，我们已经实现一个简单reactive()函数，用来将普通对象转换为响应式对象。但是还缺少自动执行track()函数和trigger()函数，接下来修改上面代码：
 
-```javascript
+```javascript {.animated.fadeInUp}
 const targetMap = new WeakMap();
 let total = 0;
 const effect = () => { total = product.price * product.quantity };
@@ -390,7 +390,7 @@ console.log(total);
 
 比如现在的依赖为 foo 函数，就要修改 track 函数的逻辑，可能是这样
 
-```javascript
+```javascript {.animated.fadeInUp}
 const foo = () => { /**/ };
 const track = (target, key) => {     // ②
   // ...
@@ -406,7 +406,7 @@ const track = (target, key) => {     // ②
 
 接下来引入 activeEffect 变量，来保存当前运行的 effect 函数。
 
-```javascript
+```javascript {.animated.fadeInUp}
 let activeEffect = null;
 const effect = eff => {
   activeEffect = eff; // 1. 将 eff 函数赋值给 activeEffect
@@ -417,7 +417,7 @@ const effect = eff => {
 
 然后在 track 函数中将 activeEffect 变量作为依赖：
 
-```javascript
+```javascript {.animated.fadeInUp}
 const track = (target, key) => {
     if (activeEffect) {  // 1. 判断当前是否有 activeEffect
         let depsMap = targetMap.get(target);
@@ -435,7 +435,7 @@ const track = (target, key) => {
 
 使用方式修改为：
 
-```javascript
+```javascript {.animated.fadeInUp}
 effect(() => {
     total = product.price * product.quantity
 });
@@ -445,7 +445,7 @@ effect(() => {
 
 <slide :class="size-50 aligncenter">
 
-```javascript
+```javascript {.animated.fadeInUp}
 const targetMap = new WeakMap();
 let activeEffect = null; // 引入 activeEffect 变量
 
@@ -522,7 +522,7 @@ console.log(total, salePrice);  // 100 18
 
 > ref：接受一个内部值并返回一个响应式且可变的 ref 对象。ref 对象具有指向内部值的单个 property .value。
 
-```javascript
+```javascript {.animated.fadeInUp}
 const count = ref(0)
 console.log(count.value) // 0
 
@@ -537,7 +537,7 @@ console.log(count.value) // 1
 
 - 使用 rective 函数
 
-```javascript
+```javascript {.animated.fadeInUp}
 const ref = intialValue => reactive({value: intialValue});
 ```
 
@@ -546,7 +546,7 @@ const ref = intialValue => reactive({value: intialValue});
 - 使用对象的属性访问器（计算属性）
 
 属性方式去包括：getter 和 setter。
-```javascript
+```javascript {.animated.fadeInUp}
 const ref = raw => {
   const r = {
     get value(){
